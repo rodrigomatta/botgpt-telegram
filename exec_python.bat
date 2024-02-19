@@ -5,4 +5,5 @@ taskkill /f /im python.exe
 call conda activate openai
 
 :: Executar o script Python
+cd app
 python main.py

@@ -1,0 +1,14 @@
+# Versão da configuração do Docker Compose
+version: '3.8'
+
+# Definindo os serviços
+services:
+  # Configurações do serviço "cowsay"
+  botapi:
+    container_name: botapi  # Nome do contêiner
+    build:
+      context: . # Caminho para o diretório do Dockerfile
+      dockerfile: Dockerfile  # Nome do Dockerfile a ser utilizado
+    volumes:
+      - ${PROJECT_PATH}/app:/app  # Mapeia o diretório do projeto para o diretório /app no contêiner
+    restart: always  # Reinicia o contêiner sempre que ele parar ou falhar
