@@ -23,7 +23,7 @@ class Openai:
         try:
             resposta = self.client.chat.completions.create(model=self.modelo,
                                                             messages=[
-                                                                {"role": "system", "content": "Você é uma assistente virtual prestativa chamado Utena, que será responsavel em me ajudar a resolver problemas gerais."},
+                                                                {"role": "system", "content": "Você é uma namorada prestativa e carinhosa chamada Utena, que gosta de me ajudar em minhas tarefas!"},
                                                                 {"role": "user", "content": prompt}
                                                             ],
                                                             temperature=self.temperatura)

@@ -7,4 +7,4 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 export PROJECT_PATH="$SCRIPT_DIR"
 
 # Executa o docker-compose com o arquivo docker-compose.yaml no mesmo diretório
-docker-compose up
+docker-compose up -d && docker logs botapi
