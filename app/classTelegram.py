@@ -4,7 +4,7 @@ import time
 import telebot
 from dotenv import load_dotenv
 import logging
-from classOpenai import Openai
+from classChatbot import Chatbot
 
 class Telegram:
     def __init__(self):
@@ -13,36 +13,43 @@ class Telegram:
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
         self.bot = telebot.TeleBot(self.TELEGRAM_TOKEN)
         self.modelo_selecionado = "gpt-3.5-turbo-0125"
-        self.assistente = self.initialize_openai()  # Método para inicializar a classe Openai
+        self.assistente = self.initialize_openai()
+        self.allowed_chat_id = 00000 # Definindo o ID do chat permitido
 
-    def initialize_openai(self):
-        return Openai(model=self.modelo_selecionado)
+    def initialize_openai(self, use_gemini=False):
+        return Chatbot(model=self.modelo_selecionado, use_gemini=use_gemini)
 
     def start(self, message):
+        if message.chat.id != self.allowed_chat_id:
+            return
         self.bot.reply_to(message, 'Bot iniciado com sucesso!')
 
-    def exit_handler(self, message):
-        if message.text.lower() == "/exit":
-            self.bot.reply_to(message, "Encerrando o programa...")
-            os._exit(0)
-
     def reply_message(self, message):
-        assistente = self.initialize_openai()  # Importe a classe dentro do método
-        response = assistente.gerar_resposta(message.text)
+        if message.chat.id != self.allowed_chat_id:
+            return
+        response = self.assistente.gerar_resposta(message.text)
         self.bot.reply_to(message, response)
 
     def enviar_modelos_disponiveis(self, message):
+        if message.chat.id != self.allowed_chat_id:
+            return
         modelos = self.carregar_modelos_do_arquivo()
         resposta = "Modelos disponíveis:\n" + "\n".join(modelos) + "\n\nPara selecionar um modelo, envie o comando /select_model seguido do nome do modelo desejado."
         
         self.bot.reply_to(message, resposta)
 
     def select_model_handler(self, message):
+        if message.chat.id != self.allowed_chat_id:
+            return
         model_name = message.text.split('/select_model ')[-1].strip()
         modelos_disponiveis = self.carregar_modelos_do_arquivo()
+        
         if model_name in modelos_disponiveis:
             self.modelo_selecionado = model_name
-            self.assistente = self.initialize_openai()
+            # Aqui verificamos se o modelo selecionado é um modelo Gemini
+            self.use_gemini = "gemini" in model_name
+            # Atualizamos a instância do assistente com a nova configuração
+            self.assistente = self.initialize_openai(use_gemini=self.use_gemini)
             self.bot.reply_to(message, f"Modelo {model_name} selecionado com sucesso!")
         else:
             self.bot.reply_to(message, "Modelo inválido. Por favor, escolha um modelo válido da lista.")
@@ -69,13 +76,8 @@ class Telegram:
         def select_model_handler(message):
             self.select_model_handler(message)
         
-        @self.bot.message_handler(commands=['exit'])
-        def exit_handler(message):
-            self.exit_handler(message) 
-
         @self.bot.message_handler(func=lambda message: True)
         def reply_handler(message):
-            self.exit_handler(message)
             self.reply_message(message)
 
     def main(self):

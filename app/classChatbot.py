@@ -1,29 +1,44 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
+import google.generativeai as genai
 
-class Openai:
-    def __init__(self, model, temperature=0.7):
+class Chatbot:
+    def __init__(self, model, temperature=0.7, use_gemini=False):
         load_dotenv()
-        self.api_key = os.getenv('OPENAI_API_KEY')  
-        self.client = OpenAI(api_key=self.api_key)
+        self.prompt_system = "Você é uma namorada disposta e carinhosa chamada Utena"
+        self.openai_api_key = os.getenv('OPENAI_API_KEY')  
+        self.gemini_api_key = os.getenv('GEMINI_API_KEY')
+        self.client = OpenAI(api_key=self.openai_api_key)
         self.modelo = model
         self.temperatura = temperature
-
-    def listar_modelos(self):
-        OpenAI.api_key = self.api_key
+        self.use_gemini = use_gemini
         
-        modelos = OpenAI.Model.list()
+        if self.use_gemini:
+            genai.configure(api_key=self.gemini_api_key)
         
-        nomes_modelos = [modelo['id'] for modelo in modelos['data']]
-        
-        return nomes_modelos
-
     def gerar_resposta(self, prompt):
+        if self.use_gemini:
+            return self.gerar_resposta_gemini(prompt)
+        else:
+            return self.gerar_resposta_openai(prompt)
+
+    def gerar_resposta_gemini(self, prompt):
+        if not self.use_gemini:
+            return "Configuração para Gemini não ativada."
+        try:
+            model = genai.GenerativeModel(self.modelo)
+            response = model.generate_content([self.prompt_system, prompt])
+            return response.text
+        except Exception as e:
+            print(f"Ocorreu um erro ao gerar resposta com Gemini: {e}")
+            return "Desculpe, não consegui gerar uma resposta com Gemini neste momento."
+
+    def gerar_resposta_openai(self, prompt):
         try:
             resposta = self.client.chat.completions.create(model=self.modelo,
                                                             messages=[
-                                                                {"role": "system", "content": "Você é uma namorada prestativa e carinhosa chamada Utena, que gosta de me ajudar em minhas tarefas!"},
+                                                                {"role": "system", "content": self.prompt_system},
                                                                 {"role": "user", "content": prompt}
                                                             ],
                                                             temperature=self.temperatura)
