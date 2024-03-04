@@ -6,11 +6,6 @@
             "output_price": 0.03
         },
         {
-            "name": "gpt-4-0613",
-            "input_price": 0.03,
-            "output_price": 0.06
-        },
-        {
             "name": "gpt-4-32k-0613",
             "input_price": 0.06,
             "output_price": 0.12
@@ -34,6 +29,31 @@
             "name": "gemini-pro-vision",
             "input_price": 0,
             "output_price": 0
+        },
+        {
+            "name": "open-mistral-7b",
+            "input_price": 0.00025,
+            "output_price": 0.00025
+        },
+        {
+            "name": "open-mixtral-8x7b",
+            "input_price": 0.0007,
+            "output_price": 0.0007
+        },
+        {
+            "name": "mistral-small-latest",
+            "input_price": 0.002,
+            "output_price": 0.006
+        },
+        {
+            "name": "mistral-medium-latest",
+            "input_price": 0.0027,
+            "output_price": 0.0081
+        },
+        {
+            "name": "mistral-large-latest",
+            "input_price": 0.008,
+            "output_price": 0.024
         }
     ]
 }

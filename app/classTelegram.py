@@ -13,11 +13,15 @@ class Telegram:
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
         self.bot = telebot.TeleBot(self.TELEGRAM_TOKEN)
         self.modelo_selecionado = "gpt-3.5-turbo-0125"
-        self.assistente = self.initialize_openai()
-        self.allowed_chat_id = 00000 # Definindo o ID do chat permitido
+        self.assistente = self.initialize_gemini()
+        self.assistente = self.initialize_mistral()
+        self.allowed_chat_id = 000000000 # Definindo o ID do chat permitido
 
-    def initialize_openai(self, use_gemini=False):
+    def initialize_gemini(self, use_gemini=False):
         return Chatbot(model=self.modelo_selecionado, use_gemini=use_gemini)
+    
+    def initialize_mistral(self, use_mistral=False):
+        return Chatbot(model=self.modelo_selecionado, use_mistral=use_mistral)
 
     def start(self, message):
         if message.chat.id != self.allowed_chat_id:
@@ -46,10 +50,16 @@ class Telegram:
         
         if model_name in modelos_disponiveis:
             self.modelo_selecionado = model_name
-            # Aqui verificamos se o modelo selecionado é um modelo Gemini
             self.use_gemini = "gemini" in model_name
-            # Atualizamos a instância do assistente com a nova configuração
-            self.assistente = self.initialize_openai(use_gemini=self.use_gemini)
+            self.use_mistral = "mistral" in model_name or "mixtral" in model_name
+
+            if self.use_gemini:
+                self.assistente = self.initialize_gemini(use_gemini=True)
+            elif self.use_mistral:
+                self.assistente = self.initialize_mistral(use_mistral=True)
+            else:
+                self.assistente = self.initialize_gemini(use_gemini=False)
+            
             self.bot.reply_to(message, f"Modelo {model_name} selecionado com sucesso!")
         else:
             self.bot.reply_to(message, "Modelo inválido. Por favor, escolha um modelo válido da lista.")
