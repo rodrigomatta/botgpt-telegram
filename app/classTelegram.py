@@ -12,10 +12,10 @@ class Telegram:
         self.TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
         self.bot = telebot.TeleBot(self.TELEGRAM_TOKEN)
-        self.modelo_selecionado = "gpt-3.5-turbo-0125"
+        self.modelo_selecionado = os.getenv('SELECTED_MODEL')
         self.assistente = self.initialize_gemini()
         self.assistente = self.initialize_mistral()
-        self.allowed_chat_id = 000000000 # Definindo o ID do chat permitido
+        self.allowed_chat_id = int(os.getenv('TELEGRAM_ALLOWED_ID_CHAT'))
 
     def initialize_gemini(self, use_gemini=False):
         return Chatbot(model=self.modelo_selecionado, use_gemini=use_gemini)
