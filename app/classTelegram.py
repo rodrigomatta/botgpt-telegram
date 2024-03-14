@@ -16,12 +16,18 @@ class Telegram:
         self.assistente = self.initialize_gemini()
         self.assistente = self.initialize_mistral()
         self.allowed_chat_id = int(os.getenv('TELEGRAM_ALLOWED_ID_CHAT'))
+        self.use_gemini = False
+        self.use_mistral = False
+        self.use_anthropic = False
 
     def initialize_gemini(self, use_gemini=False):
-        return Chatbot(model=self.modelo_selecionado, use_gemini=use_gemini)
+        return Chatbot(model=self.modelo_selecionado, use_gemini=use_gemini, use_mistral=False, use_anthropic=False) 
+
+    def initialize_mistral(self, use_mistral=False): 
+        return Chatbot(model=self.modelo_selecionado, use_gemini=False, use_mistral=use_mistral, use_anthropic=False)
     
-    def initialize_mistral(self, use_mistral=False):
-        return Chatbot(model=self.modelo_selecionado, use_mistral=use_mistral)
+    def initialize_anthropic(self, use_anthropic=False): 
+        return Chatbot(model=self.modelo_selecionado, use_gemini=False, use_mistral=False, use_anthropic=use_anthropic)
 
     def start(self, message):
         if message.chat.id != self.allowed_chat_id:
@@ -31,7 +37,7 @@ class Telegram:
     def reply_message(self, message):
         if message.chat.id != self.allowed_chat_id:
             return
-        response = self.assistente.gerar_resposta(message.text)
+        response = self.assistente.gerar_resposta(message.text, self.modelo_selecionado)
         self.bot.reply_to(message, response)
 
     def enviar_modelos_disponiveis(self, message):
@@ -51,12 +57,15 @@ class Telegram:
         if model_name in modelos_disponiveis:
             self.modelo_selecionado = model_name
             self.use_gemini = "gemini" in model_name
+            self.use_anthropic = "claude" in model_name
             self.use_mistral = "mistral" in model_name or "mixtral" in model_name
 
             if self.use_gemini:
                 self.assistente = self.initialize_gemini(use_gemini=True)
             elif self.use_mistral:
                 self.assistente = self.initialize_mistral(use_mistral=True)
+            elif self.use_anthropic:
+                self.assistente = self.initialize_anthropic(use_anthropic=True)
             else:
                 self.assistente = self.initialize_gemini(use_gemini=False)
             
@@ -74,18 +83,41 @@ class Telegram:
             return []
         
     def add_handlers(self):
-        @self.bot.message_handler(commands=['start'])
-        def start_handler(message):
-            self.start(message)
+        @self.bot.message_handler(commands=['start', 'models', 'select_model'])
+        def handle_command(message):
+            if message.text.startswith('/start'):
+                self.start(message)
+            elif message.text.startswith('/models'):
+                self.enviar_modelos_disponiveis(message)
+            elif message.text.startswith('/select_model'):
+                self.select_model_handler(message)
 
-        @self.bot.message_handler(commands=['models'])
-        def models_handler(message):
-            self.enviar_modelos_disponiveis(message)
+        @self.bot.message_handler(commands=['custo'])
+        def custo_handler(message):
+            if message.chat.id != self.allowed_chat_id:
+                return
+            try:
+                with open('custos.json', 'r') as file:
+                    custos = json.load(file)
+                    total_tokens_prompt = sum(item['tokens_prompt'] for item in custos)
+                    total_tokens_completion = sum(item['tokens_completion'] for item in custos)
+                    total_tokens = total_tokens_prompt + total_tokens_completion
+                    custo_entrada = sum(item['custo_entrada'] for item in custos)
+                    custo_saida = sum(item['custo_saida'] for item in custos)
+                    custo_total = sum(item['custo_total'] for item in custos)
+                    
+                    resposta = (f"############ RELATÓRIO DE CUSTOS ############\n"
+                                f"####### SOMENTE OPENAI E ANTHROPIC ##########\n\n"
+                                f"Total de Tokens do prompt: {total_tokens_prompt}\n"
+                                f"Total de Tokens da completion: {total_tokens_completion}\n"
+                                f"Total de tokens Geral: {total_tokens}\n"
+                                f"Custo de entrada: ${custo_entrada:.4f}\n"
+                                f"Custo de saída: ${custo_saida:.4f}\n"
+                                f"Custo total: ${custo_total:.4f}")
+                    self.bot.reply_to(message, resposta)
+            except FileNotFoundError:
+                self.bot.reply_to(message, "Nenhum custo registrado até o momento.")
 
-        @self.bot.message_handler(commands=['select_model'])
-        def select_model_handler(message):
-            self.select_model_handler(message)
-        
         @self.bot.message_handler(func=lambda message: True)
         def reply_handler(message):
             self.reply_message(message)
