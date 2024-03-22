@@ -1,4 +1,4 @@
-from classTelegram import Telegram
+from telegram.classTelegram import Telegram
 
 if __name__ == "__main__":
     telegram_bot = Telegram()
