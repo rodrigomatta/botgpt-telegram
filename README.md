@@ -23,9 +23,9 @@ Para executar este projeto, você precisará de:
 
 ## Uso
 
-- Para Iniciar o bot do Telegram, envie /start ou alguma mensagem para interagir com o chatbot (por padrão, o modelo principal é o gemini-pro).
+- Para Iniciar o bot do Telegram, envie /start para exibir a mensagem inicial ou alguma mensagem para interagir com o chatbot (por padrão, o modelo principal é o gemini-pro).
 - Use o comando `/models` para ver os modelos disponíveis.
-- Use o comando `/select_model` seguido pelo nome do modelo desejado para selecionar um modelo específico.
+- Use o comando `/custo` para ver os custos de utilização das APIs Anthropic e OpenAI.
 
 ## Configuração Avançada
 
