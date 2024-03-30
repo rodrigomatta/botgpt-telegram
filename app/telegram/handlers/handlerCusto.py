@@ -2,14 +2,15 @@ import json
 from telegram.handlers.baseHandler import BaseHandler
 
 class HandlerCusto(BaseHandler):
-    def __init__(self, bot, allowed_chat_id):
-        super().__init__(bot, allowed_chat_id)
+    def __init__(self, bot, allowed_chat_id, allowed_tokens):
+        super().__init__(bot, allowed_chat_id, allowed_tokens)
         self.allowed_chat_id = allowed_chat_id
-        
+        self.allowed_tokens = allowed_tokens
+
     def register_handlers(self):
         @self.bot.message_handler(commands=['custo'])
         def custo_handler(message):
-            if message.chat.id != self.allowed_chat_id:
+            if message.chat.id != self.allowed_chat_id and message.chat.id not in self.allowed_tokens:
                 return
             try:
                 with open('custos.json', 'r') as file:

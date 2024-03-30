@@ -1,5 +1,14 @@
 # BotGPT for Telegram
 
+## Novidades 🎉
+- Respostas dos modelos com suporte a MarkDown
+- Adicionado suporte para intregação de outros usuários do telegram, digite /admin help para saber as novidades
+
+## Proximos Lançamentos 🚀
+- Prompts personalizados para Assistentes (/assistente)
+- Integração com MongoDB
+
+## O Projeto
 Este projeto consiste em dois arquivos principais:
 
 1. **classChatbot.py**: Implementa um chatbot capaz de gerar respostas com base em modelos de IA da OpenAI, Mistral, Gemini e Anthropic. O bot pode ser configurado para usar um ou mais desses serviços de IA para gerar respostas para prompts dados pelo usuário.
@@ -49,9 +58,11 @@ O projeto é organizado em torno de duas classes principais: `classChatbot.py` e
 
 ### Handlers
 
+- **baseHandler.py**: Responsavel por integrar os handlers com ClassTelegram.
 - **handlerModels.py**: Gerencia a seleção e atualização do modelo de IA a ser utilizado pelo chatbot.
 - **handlerReply.py**: Lida com as mensagens recebidas e gera respostas com base no modelo de IA selecionado.
 - **handlerCusto.py**: Fornece informações sobre os custos associados ao uso dos modelos de IA.
+- **handlerAdmin.py**: Gerencia as funções de administração do Bot.
 
 ### Configuração
 

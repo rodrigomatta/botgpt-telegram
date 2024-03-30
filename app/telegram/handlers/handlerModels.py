@@ -6,10 +6,11 @@ from telegram.handlers.baseHandler import BaseHandler
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 class HandlerModels(BaseHandler):
-    def __init__(self, bot, allowed_chat_id, telegram_instance):
-        super().__init__(bot, allowed_chat_id)
+    def __init__(self, bot, allowed_chat_id, allowed_tokens, telegram_instance):
+        super().__init__(bot, allowed_chat_id, allowed_tokens)
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
         self.telegram_instance = telegram_instance
+        self.allowed_tokens = allowed_tokens
         self.modelo_selecionado = os.getenv('SELECTED_MODEL')
 
     def initialize_assistant(self, model_name):
@@ -41,7 +42,7 @@ class HandlerModels(BaseHandler):
                                            text="modelo invalido. Por favor selecione um modelo válido na lista.")
 
     def send_available_models(self, message):
-        if message.chat.id != self.allowed_chat_id:
+        if message.chat.id != self.allowed_chat_id and message.chat.id not in self.allowed_tokens:
             return
 
         models = self.load_models_from_file()
