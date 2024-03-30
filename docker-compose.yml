@@ -3,7 +3,6 @@ version: '3.8'
 
 # Definindo os serviços
 services:
-  # Configurações do serviço "cowsay"
   botapi:
     container_name: botapi  # Nome do contêiner
     build:
