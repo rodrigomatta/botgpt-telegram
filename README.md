@@ -4,7 +4,7 @@
 - Respostas dos modelos com suporte a MarkDown
 - Adicionado suporte para intregação de outros usuários do telegram, digite /admin help para saber as novidades
 
-## Proximos Lançamentos 🚀
+## Planos para Proximos Lançamentos 🚀
 - Prompts personalizados para Assistentes (/assistente)
 - Integração com MongoDB
 
@@ -19,7 +19,7 @@ Este projeto consiste em dois arquivos principais:
 
 Para executar este projeto, você precisará de:
 
-- Python 3.12.2
+- Python 3.12.3
 - Pacotes Python listados no arquivo `requirements.txt`
 - Credenciais de API da OpenAI, Mistral, Gemini e Anthropic (veja o arquivo example.env)
 
