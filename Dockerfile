@@ -4,14 +4,14 @@ ARG CONTAINER_USERID
 # Atualiza a lista de pacotes e instala as dependências necessárias
 RUN zypper -n --gpg-auto-import-keys refresh && \
     zypper -n install -y gcc libffi-devel libopenssl-devel zlib-devel wget tar gzip make && \
-    wget https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz && \
-    tar -xf Python-3.12.2.tgz && \
-    cd Python-3.12.2 && \
+    wget https://www.python.org/ftp/python/3.12.3/Python-3.12.3.tgz && \
+    tar -xf Python-3.12.3.tgz && \
+    cd Python-3.12.3 && \
     ./configure && \
     make && \
     make install && \
     cd .. && \
-    rm -rf Python-3.12.2* && \
+    rm -rf Python-3.12.3* && \
     zypper -n remove -y gcc libffi-devel libopenssl-devel zlib-devel wget tar gzip make && \
     zypper clean --all
 
