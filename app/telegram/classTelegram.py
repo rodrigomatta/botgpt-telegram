@@ -51,7 +51,7 @@ class Telegram:
     def update_assistant(self, modelo_selecionado):
         use_openai = "gpt" in modelo_selecionado.lower()
         use_gemini = "gemini" in modelo_selecionado.lower()
-        use_mistral = any(m in modelo_selecionado.lower() for m in ["mistral", "mixtral"])
+        use_mistral = any(m in modelo_selecionado.lower() for m in ["mistral", "mixtral", "codestral"])
         use_anthropic = "claude" in modelo_selecionado.lower()
 
         self.assistente.update_instance(modelo_selecionado, use_openai, use_gemini, use_mistral, use_anthropic)

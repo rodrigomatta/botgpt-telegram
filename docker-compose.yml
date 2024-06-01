@@ -1,9 +1,7 @@
-# Versão da configuração do Docker Compose
-version: '3.9'
-
+# https://pypi.org - site de pacotes do python para rerquirements.txt
 # Definindo os serviços
 services:
-  # Configurações do serviço "cowsay"
+  # Configurações do serviço
   botapi:
     container_name: botapi  # Nome do contêiner
     build:

@@ -16,7 +16,7 @@ class HandlerModels(BaseHandler):
     def initialize_assistant(self, model_name):
         use_openai = "gpt" in model_name.lower() 
         use_gemini = "gemini" in model_name.lower()
-        use_mistral = any(m in model_name.lower() for m in ["mistral", "mixtral"])  
+        use_mistral = any(m in model_name.lower() for m in ["mistral", "mixtral","codestral"])  
         use_anthropic = "claude" in model_name.lower()
 
         return Chatbot(model=model_name, use_openai=use_openai, use_gemini=use_gemini,

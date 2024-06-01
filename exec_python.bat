@@ -2,7 +2,7 @@
 taskkill /f /im python.exe
 
 :: Ativar o ambiente do Conda
-call conda activate telegramchat
+call conda activate chattelegram
 
 :: Executar o script Python
 cd app

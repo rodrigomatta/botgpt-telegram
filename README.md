@@ -1,12 +1,15 @@
 # BotGPT for Telegram
 
 ## Novidades 🎉
+- Modelos Atualizados (até Maio/2024)
 - Respostas dos modelos com suporte a MarkDown
 - Adicionado suporte para intregação de outros usuários do telegram, digite /admin help para saber as novidades
 
 ## Planos para Proximos Lançamentos 🚀
+- integração com litellm (subistituindo as bibliotecas de cada provedor)
 - Prompts personalizados para Assistentes (/assistente)
 - Integração com MongoDB
+- Integração com LangChain
 
 ## O Projeto
 Este projeto consiste em dois arquivos principais:

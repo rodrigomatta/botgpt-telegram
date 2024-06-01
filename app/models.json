@@ -1,9 +1,9 @@
 {
     "models": [
         {
-            "name": "gpt-4-turbo",
-            "input_price": 0.01,
-            "output_price": 0.03
+            "name": "gpt-4o",
+            "input_price": 0.005,
+            "output_price": 0.015
         },
         {
             "name": "gpt-3.5-turbo",
@@ -16,9 +16,19 @@
             "output_price": 0
         },
         {
-            "name": "gemini-pro-vision",
+            "name": "gemini-1.5-pro-latest",
             "input_price": 0,
             "output_price": 0
+        },
+        {
+            "name": "gemini-1.5-flash-latest",
+            "input_price": 0,
+            "output_price": 0
+        },
+        {
+            "name": "codestral-latest",
+            "input_price": 0.0007,
+            "output_price": 0.0007
         },
         {
             "name": "open-mistral-7b",
@@ -64,11 +74,6 @@
             "name": "claude-3-haiku-20240307",
             "input_price": 0.003,
             "output_price": 0.015
-        },
-        {
-            "name": "claude-2",
-            "input_price": 0.008,
-            "output_price": 0.024
         },
         {
             "name": "claude-2.1",
