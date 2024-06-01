@@ -4,7 +4,7 @@ ARG CONTAINER_USERID
 # Atualiza a lista de pacotes e instala as dependências necessárias
 RUN zypper -n --gpg-auto-import-keys refresh && \
     zypper -n install -y gcc libffi-devel libopenssl-devel zlib-devel wget tar gzip make && \
-    wget 3.12.3/Python-3.12.3.tgz && \
+    wget https://www.python.org/ftp/python/3.12.3/Python-3.12.3.tgz && \
     tar -xf Python-3.12.3.tgz && \
     cd Python-3.12.3 && \
     ./configure && \
